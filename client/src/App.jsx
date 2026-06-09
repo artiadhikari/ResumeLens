@@ -17,6 +17,7 @@ const App = () => {
 <Route index element={<Dashboard/>}/>
 <Route path='builder/:resumeId' index element={<ResumeBuilder/>}/>
   </Route>
+  
 <Route path='view/:resumeId' element={<Preview/>}/>
 <Route path='login' element={<Login/>}/>
 
