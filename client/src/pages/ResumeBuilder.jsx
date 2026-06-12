@@ -47,7 +47,7 @@ if(resume){
   const activeSection=sections[activeSectionIndex]
   useEffect(()=>{
     loadExistingResume()
-  })
+  },[resumeId])
   return (
     <div>
       <div className='max-w-7xl mx-auto px-4 py-6'>
