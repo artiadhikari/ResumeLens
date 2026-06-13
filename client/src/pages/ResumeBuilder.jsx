@@ -68,7 +68,9 @@ if(resume){
 
     {/* section navigation */}
     <div className='flex justify-between items-center mb-6 border-b border-gray-300 py-1'>
-      <div></div>
+      <div>
+        
+      </div>
       <div className='flex items-center'>
         {activeSectionIndex !== 0 && (
   <button onClick={()=>setActiveSectionIndex((prevIndex)=>Math.max(prevIndex-1,0))}className='flex items-center gap-1 p-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all' disabled={
@@ -102,9 +104,8 @@ Next    <ChevronRight className='size-4'/>
        {/* Right-Panel Form */} 
        <div className='lg:col-span-7 max-lg:mt-6'> 
 <div> 
-
   <ResumePreview data={resumeData} template={resumeData.template} accentColor={resumeData.accent_color} />
-</div>
+</div>cc
        </div>
   </div>
 </div>
