@@ -3,7 +3,10 @@ import { Link, useParams } from 'react-router-dom'
 import { dummyResumeData } from '../assets/assets'
 import { ArrowLeftIcon, Briefcase, ChevronLeft, ChevronRight, FileText, FileTextIcon, FolderIcon, GraduationCap, Sparkle, Sparkles, User, UserIcon } from 'lucide-react'
 import PersonalInfoForm from '../Components/PersonalInfoForm'
+import ProfessionalSummaryForm from '../Components/ProfessionalSummaryForm'
 import ResumePreview from '../Components/ResumePreview'
+import TemplateSelector from '../Components/TemplateSelector'
+import ColorPicker from '../Components/ColorPicker'
 
 const ResumeBuilder = () => {
 
@@ -13,6 +16,7 @@ const ResumeBuilder = () => {
     _id:'',
     title:'',
     personal_info:{},
+    professional_summary:'',
     experience:[],
     education:[],
     project:[],
@@ -68,8 +72,9 @@ if(resume){
 
     {/* section navigation */}
     <div className='flex justify-between items-center mb-6 border-b border-gray-300 py-1'>
-      <div>
-        
+      <div className='flex items-center gap-2'>
+        <TemplateSelector selectedTemplate={resumeData.template} onChange={(template)=>setResumeData(prev=>({...prev,template}))}/>
+          <ColorPicker selectedColor={resumeData.accent_color} onChange={(color)=>setResumeData(prev=>({...prev, accent_color:color}))}/>
       </div>
       <div className='flex items-center'>
         {activeSectionIndex !== 0 && (
@@ -96,6 +101,13 @@ Next    <ChevronRight className='size-4'/>
      <PersonalInfoForm data={resumeData.personal_info} onChange={(data)=>setResumeData(prev=>({...prev,personal_info:data}))}  removeBackground={removeBackground} setRemoveBackground={setRemoveBackground}/>
      )}
 
+     {activeSection.id === 'summary' && (
+    <ProfessionalSummaryForm data={resumeData.professional_summary}
+    onChange={(data) => setResumeData(prev => ({...prev,
+    professional_summary: data}))} setResumeData={setResumeData}/>
+)}
+
+
     </div>
   </div>
 </div>
@@ -105,7 +117,7 @@ Next    <ChevronRight className='size-4'/>
        <div className='lg:col-span-7 max-lg:mt-6'> 
 <div> 
   <ResumePreview data={resumeData} template={resumeData.template} accentColor={resumeData.accent_color} />
-</div>cc
+</div>
        </div>
   </div>
 </div>
