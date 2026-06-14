@@ -8,6 +8,7 @@ import ResumePreview from '../Components/ResumePreview'
 import TemplateSelector from '../Components/TemplateSelector'
 import ColorPicker from '../Components/ColorPicker'
 import ExperienceForm from '../Components/ExperienceForm'
+import EducationForm from '../Components/EducationForm'
 
 const ResumeBuilder = () => {
 
@@ -110,7 +111,12 @@ Next    <ChevronRight className='size-4'/>
      {activeSection.id === 'experience' && (
     <ExperienceForm data={resumeData.experience}
     onChange={(data) => setResumeData(prev => ({...prev,
-    experience: data}))} setResumeData={setResumeData}/>
+    experience: data}))}/>
+)}
+     {activeSection.id === 'education' && (
+    <EducationForm data={resumeData.education}
+    onChange={(data) => setResumeData(prev => ({...prev,
+    education: data}))}/>
 )}
 
 
