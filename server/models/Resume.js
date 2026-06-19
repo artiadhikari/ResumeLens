@@ -42,7 +42,7 @@ const ResumeSchema = new mongoose.Schema({
     graduation_date: { type: String },
     gpa: { type: String },
 }
-]
+],
 
 }, {timestamps:true, minimize:false})
 
