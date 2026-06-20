@@ -1,5 +1,6 @@
 import { Lock, Mail, User2Icon } from 'lucide-react'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import api from '../configs/api'
 import { useDispatch } from 'react-redux'
@@ -8,6 +9,7 @@ import toast from 'react-hot-toast'
 
 const Login = () => {
     const dispatch = useDispatch()
+  const navigate = useNavigate()
   const query= new URLSearchParams(window.location.search)
   const urlState=query.get('state')
    const [state, setState] = React.useState(urlState||"login")
@@ -26,6 +28,7 @@ const Login = () => {
             const { data } = await api.post(`/api/users/${endpoint}`, formData)
             dispatch(login(data))
             localStorage.setItem('token', data.token)
+            navigate('/app')
             if (data?.message) toast.success(data.message)
             
         } catch (error) {
