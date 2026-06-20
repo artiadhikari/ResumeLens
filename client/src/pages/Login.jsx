@@ -1,8 +1,13 @@
 import { Lock, Mail, User2Icon } from 'lucide-react'
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+
+import api from '../configs/api'
+import { useDispatch } from 'react-redux'
+import { login } from '../app/features/authSlice'
+import toast from 'react-hot-toast'
 
 const Login = () => {
+    const dispatch = useDispatch()
   const query= new URLSearchParams(window.location.search)
   const urlState=query.get('state')
    const [state, setState] = React.useState(urlState||"login")
@@ -15,6 +20,18 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+
+        try {
+            const endpoint = state === "login" ? "login" : "register"
+            const { data } = await api.post(`/api/users/${endpoint}`, formData)
+            dispatch(login(data))
+            localStorage.setItem('token', data.token)
+            if (data?.message) toast.success(data.message)
+            
+        } catch (error) {
+            // Toast immediately; response may arrive a bit later depending on network
+            toast.error(error?.response?.data?.message || "Invalid email or password")
+        }
 
     }
 
