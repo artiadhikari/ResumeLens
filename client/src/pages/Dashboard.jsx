@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import api from '../configs/api'
 import toast from 'react-hot-toast'
+import pdfToText from 'react-pdftotext'
 
 
 const Dashboard = () => {
@@ -22,6 +23,8 @@ const Dashboard = () => {
   const [editResumeId, setEditResumeId] = useState('')
 
   const navigate = useNavigate()
+
+  const [isLoading, setIsLoading]=useState(false)
 
   const loadAllResumes = async () => {
     setAllResumes(dummyResumeData)
@@ -43,10 +46,23 @@ const Dashboard = () => {
    }
   }
 
-  const uploadResume= async (event) => {
-        event.preventDefault()
-   
+ const uploadResume = async (event) => {
+  event.preventDefault()
+  setIsLoading(true)
+  try {
+    const resumeText = await pdfToText(resume)
+    const { data } = await api.post('/api/ai/upload-resume', {title, resumeText}, {headers:
+    { Authorization: token }})
+    setTitle('')
+    setResume(null)
+    setShowUploadResume(false)
+    navigate(`/app/builder/${data.resumeId}`)
+  } catch (error) {
+    toast.error(error?.response?.data?.message || error.message)
   }
+  setIsLoading(false)
+}
+
 
   const editTitle =async (event) => {
       event.preventDefault()
