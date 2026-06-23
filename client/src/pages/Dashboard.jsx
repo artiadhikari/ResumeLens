@@ -70,10 +70,23 @@ const Dashboard = () => {
   setIsLoading(false)
 }
 
-
-  const editTitle =async (event) => {
-      event.preventDefault()
+const editTitle = async (event) => {
+  try {
+    event.preventDefault()
+    const {data} = await api.put(`/api/resumes/update`, {resumeId: editResumeId,
+    resumeData: { title }}, {headers: { Authorization: token }})
+    setAllResumes(allResumes.map(resume => resume._id === editResumeId ? { ...resume,
+    title } : resume))
+    setTitle('')
+    setEditResumeId('')
+    toast.success(data.message)
+  } catch (error) {
+    toast.error(error?.response?.data?.message || error.message)
   }
+
+}
+
+
  const deleteResume = async (resumeId) => {
   try {
     const confirm = window.confirm('Are you sure you want to delete this resume?')
