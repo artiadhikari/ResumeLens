@@ -89,39 +89,41 @@ export const getPublicResumeById = async (req, res) => {
 export const updateResume = async (req, res) => {
     try {
         const userId = req.userId;
-        const { resumeId, resumeData,removeBackground } = req.body;
+        const { resumeId, removeBackground } = req.body;
         const image = req.file;
 
-        let resumeDataCopy = JSON.parse(JSON.stringify(resumeData));
+        // resumeData is sent as a JSON string via FormData — must be parsed first
+        const resumeDataParsed = typeof req.body.resumeData === 'string'
+            ? JSON.parse(req.body.resumeData)
+            : req.body.resumeData;
 
+        let resumeDataCopy = JSON.parse(JSON.stringify(resumeDataParsed));
 
-        if(image){
-
-            const imageBufferData=fs.createReadStream(image.path)
-            const response = await ImageKit.files.upload({
-  file: fs.createReadStream('path/to/file'),
-  fileName: 'resume.png',
-  folder:'user-resume',
-  transformation:{
-    pre:'w-300, h-300, fo-face, z-0.75'+
-     (removeBackground?',e-bgremove':'')
-  }
-
-});
-
-  resumeDataCopy.personal_info.image=response.url
+        if (image) {
+            const imageBufferData = fs.createReadStream(image.path);
+            const response = await ImageKit.upload({
+                file: imageBufferData,
+                fileName: 'resume.png',
+                folder: 'user-resume',
+                transformation: {
+                    pre: 'w-300, h-300, fo-face, z-0.75' + (removeBackground ? ',e-bgremove' : '')
+                }
+            });
+            resumeDataCopy.personal_info.image = response.url;
         }
-       const resume = await Resume.findOneAndUpdate(
-    { userId, _id: resumeId },
-    resumeDataCopy,
-    { new: true }
-);
+
+        const resume = await Resume.findOneAndUpdate(
+            { userId, _id: resumeId },
+            resumeDataCopy,
+            { new: true }
+        );
 
         return res.status(200).json({
             message: 'Saved successfully',
             resume
         });
     } catch (error) {
+        console.error('updateResume error:', error.message);
         return res.status(400).json({ message: error.message });
     }
 }
