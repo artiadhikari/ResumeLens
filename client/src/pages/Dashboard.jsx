@@ -243,9 +243,9 @@ const editTitle = async (event) => {
         onChange={(e) => setResume(e.target.files[0])}
       />
 
-      <button
+      <button disabled={isLoading} 
         type="submit"
-        className="w-full py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+        className="w-full py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
       > {isLoading && <Loader2Icon className='animate-spin size-4 text-white'/>}
       {isLoading?'Uploading':'    Upload Resume'}
     

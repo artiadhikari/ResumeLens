@@ -11,10 +11,13 @@ import ExperienceForm from '../Components/ExperienceForm'
 import EducationForm from '../Components/EducationForm'
 import ProjectForm from '../Components/ProjectForm'
 import SkillsForm from '../Components/SkillsForm'
+import { useSelector } from 'react-redux'
+import api from '../configs/api'
 
 const ResumeBuilder = () => {
 
   const { resumeId } = useParams()
+  const{token}=useSelector(state=>state.auth)
   const [resumeData, setResumeData] = useState({
      
     _id:'',
@@ -32,13 +35,19 @@ const ResumeBuilder = () => {
 
   })
 
-  const loadExistingResume=async()=>{
-const resume=dummyResumeData.find(resume=>resume._id===resumeId)
-if(resume){
-  setResumeData(resume)
-  document.title=resume.title
-}
+  const loadExistingResume = async () => {
+  try {
+    const {data} = await api.get('/api/resumes/get/' + resumeId, {headers: {
+    Authorization: token }})
+    if(data.resume){
+      setResumeData(data.resume)
+      document.title = data.resume.title;
+    }
+  } catch (error) {
+    console.log(error.message)
   }
+}
+
 
   const [activeSectionIndex, setActiveSectionIndex]=useState(0)
   const [removeBackground, setRemoveBackground]=useState(false)
