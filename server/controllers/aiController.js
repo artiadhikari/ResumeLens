@@ -25,9 +25,27 @@ export const enhanceProfessionalSummary = async (req, res) => {
         })
 const enhancedContent=response.choices[0].message.content;
 return res.status(200).json({enhancedContent})
-    }catch(error){
-return res.status(500).json({message: error.message})
-    }
+    } catch (error) {
+  console.log("STATUS:", error.status);
+  console.log("MESSAGE:", error.message);
+
+  console.log("ERROR OBJECT:");
+  console.dir(error, { depth: null });
+
+  if (error.cause) {
+    console.log("CAUSE:");
+    console.dir(error.cause, { depth: null });
+  }
+
+  if (error.response) {
+    console.log("RESPONSE:");
+    console.dir(error.response, { depth: null });
+  }
+
+  return res.status(error.status || 500).json({
+    message: error.message,
+  });
+}
 }
 
 
@@ -55,9 +73,14 @@ export const enhanceJobDescription = async (req, res) => {
         })
 const enhancedContent=response.choices[0].message.content;
 return res.status(200).json({enhancedContent})
-    }catch(error){
-return res.status(500).json({message: error.message})
-    }
+    } catch (error) {
+     console.log("AI Error:", error);
+
+  return res.status(error.status || 500).json({
+    message: error.message,
+    details: error
+  });
+}
 }
 
 // controller for uploading a resume to the database
@@ -137,7 +160,10 @@ const newResume= await Resume.create({userId, title, ...parsedData})
 
 
 return res.status(200).json({ resumeId: newResume._id });
-    }catch(error){
-return res.status(500).json({message: error.message})
+    } catch (error) {
+    if (error.status === 429) {
+        return res.status(429).json({ message: 'Too many requests. Please wait a moment and try again.' });
     }
+    return res.status(500).json({ message: error.message });
+}
 }
