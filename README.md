@@ -1,131 +1,102 @@
 # ResumeLens
 
-ResumeLens is a full-stack AI-powered resume builder that enables users to create, optimize, manage, and share professional resumes with real-time preview and AI assistance. It is designed to simulate modern SaaS resume platforms with intelligent content enhancement and modular resume building.
+ResumeLens is a full-stack resume builder application with a React/Vite frontend and an Express/MongoDB backend.
 
----
+## Live deployments
 
-## Overview
+- Frontend: https://resume-lens-ten.vercel.app/
+- Backend API: https://resumelens-3.onrender.com
 
-ResumeLens provides a structured and intelligent resume-building experience where users can create multiple resumes, edit modular sections, and enhance content using AI. It supports real-time preview, public sharing, and export functionality, making it suitable for professional resume management and optimization.
+## Project structure
 
----
+- `client/` - React + Vite frontend
+- `server/` - Express backend
 
-## Features
+## Local setup
 
-* Full-stack SaaS-style resume builder
-* AI-powered resume optimization using Google Gemini
-* Modular resume sections (skills, experience, education, projects)
-* Real-time preview system
-* Public resume sharing via unique URLs
-* PDF export functionality
-* Image upload with background removal
-* Multi-template resume system
-* Secure authentication using JWT
+### 1. Install dependencies
 
----
+```bash
+cd server
+npm install
+cd ../client
+npm install
+```
 
-## Tech Stack
+### 2. Backend environment variables
 
-### Frontend
+Create a `.env` file in `server/` with:
 
-* React.js (Vite)
-* Redux Toolkit
-* Tailwind CSS
-* React Router DOM
-* Axios
+```env
+MONGODB_URI=<your-mongodb-uri>
+JWT_SECRET=<your-jwt-secret>
+OPENAI_API_KEY=<your-openai-api-key>
+OPENAI_BASE_URL=<your-openai-base-url>
+OPENAI_MODEL=<your-openai-model>
+IMAGEKIT_PUBLIC_KEY=<your-imagekit-public-key>
+IMAGEKIT_PRIVATE_KEY=<your-imagekit-private-key>
+IMAGEKIT_URL_ENDPOINT=<your-imagekit-url-endpoint>
+```
 
-### Backend
+### 3. Run locally
 
-* Node.js
-* Express.js
+Backend:
 
-### Database
+```bash
+cd server
+npm start
+```
 
-* MongoDB
-* Mongoose
-* JWT Authentication
+Frontend:
 
-### Integrations
+```bash
+cd client
+npm run dev
+```
 
-* Google Gemini AI
-* ImageKit
-* REST APIs
+The frontend uses `VITE_BASE_URL` to call the backend API. For local development, create `client/.env` with:
 
----
+```env
+VITE_BASE_URL=http://localhost:3000
+```
 
-## Architecture
+## Deployment
 
-The application follows a client-server architecture:
+### Frontend (Vercel)
 
-* Frontend: React-based single-page application with component-driven UI
-* Backend: REST API built using Node.js and Express
-* Database: MongoDB with Mongoose ODM
-* AI Layer: Google Gemini API for content enhancement
-* Media Storage: ImageKit for optimized image handling
+- Deploy the `client/` directory
+- Build command: `npm run build`
+- Output directory: `dist`
+- Environment variable:
+  - `VITE_BASE_URL=https://resumelens-3.onrender.com`
 
----
+### Backend (Render)
 
-## Environment Variables
+- Deploy the `server/` directory as a Web Service
+- Start command: `npm start`
+- Render will provide `PORT` automatically
+- Required environment variables:
+  - `MONGODB_URI`
+  - `JWT_SECRET`
+  - `OPENAI_API_KEY`
+  - `OPENAI_BASE_URL`
+  - `OPENAI_MODEL`
+  - `IMAGEKIT_PUBLIC_KEY`
+  - `IMAGEKIT_PRIVATE_KEY`
+  - `IMAGEKIT_URL_ENDPOINT`
 
-### Backend
+## Notes
 
-* MONGO_URI=your_mongodb_connection_string
-* JWT_SECRET=your_jwt_secret
-* GEMINI_API_KEY=your_google_gemini_api_key
-* IMAGEKIT_PUBLIC_KEY=your_imagekit_public_key
-* IMAGEKIT_PRIVATE_KEY=your_imagekit_private_key
-* IMAGEKIT_URL_ENDPOINT=your_imagekit_endpoint
+- Ensure import paths match folder casing exactly (`Components/` vs `components/`) to avoid Linux/Vercel build failures.
+- If the backend fails to start with `ERR_MODULE_NOT_FOUND`, check that your route imports use the exact controller filenames.
 
----
+## Useful commands
 
-## Local Setup
-
-### Clone the repository
-
-git clone https://github.com/your-username/resumeLens.git
-
-### Install dependencies
+```bash
+cd server
+npm start
 
 cd client
-npm install
-
-cd ../server
-npm install
-
-### Run the application
-
-Start backend:
-
-npm run server
-
-Start frontend:
-
 npm run dev
-
----
-
-## Core Functionality
-
-* Resume creation with modular sections
-* AI-based content improvement and ATS optimization
-* Real-time preview during editing
-* Public resume sharing via unique links
-* PDF export for offline use
-* Image upload and optimization via CDN
-
----
-
-## Future Enhancements
-
-* ATS scoring system
-* Resume analytics dashboard
-* Job-specific AI tailoring
-* DOCX export support
-* Multi-language resume generation
-* Advanced AI feedback system
-
----
-
-## License
-
-MIT License
+npm run build
+```
